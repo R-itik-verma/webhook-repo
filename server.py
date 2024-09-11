@@ -5,9 +5,12 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Set up MongoDB connection
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb+srv://gritikverma331:OyufWd2vgwOJUBVA@cluster0.uws1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 db = client['github_events']  # Create a database called "github_events"
 collection = db['events']  # Collection to store GitHub events
+@app.route('/')
+def index():
+    return open('index.html').read()
 
 # Webhook endpoint to receive GitHub actions
 @app.route('/webhook', methods=['POST'])
