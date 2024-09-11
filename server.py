@@ -12,7 +12,31 @@ collection = db['events']  # Collection to store GitHub events
 # Serve plain text on the home route
 @app.route('/')
 def index():
-    return "<h1>Recent GitHub Events</h1>"
+    return '''
+    <h1>Recent GitHub Events</h1>
+    <ul id="events"></ul>
+
+    <script>
+        function fetchEvents() {
+            fetch('/events')
+                .then(response => response.json())
+                .then(data => {
+                    const eventsList = document.getElementById('events');
+                    eventsList.innerHTML = '';  // Clear old data
+                    data.forEach(event => {
+                        const li = document.createElement('li');
+                        li.textContent = `${event.author} ${event.action} to ${event.to_branch} on ${new Date(event.timestamp)}`;
+                        eventsList.appendChild(li);
+                    });
+                });
+        }
+
+        // Poll the events every 15 seconds
+        setInterval(fetchEvents, 15000);
+        fetchEvents();  // Initial fetch on page load
+    </script>
+    '''
+
 
 # Webhook endpoint to receive GitHub actions
 @app.route('/webhook', methods=['POST'])
