@@ -8,9 +8,11 @@ app = Flask(__name__)
 client = MongoClient('mongodb+srv://gritikverma331:OyufWd2vgwOJUBVA@cluster0.uws1t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 db = client['github_events']  # Create a database called "github_events"
 collection = db['events']  # Collection to store GitHub events
+
+# Serve plain text on the home route
 @app.route('/')
 def index():
-    return open('index.html').read()
+    return "<h1>Recent GitHub Events</h1>"
 
 # Webhook endpoint to receive GitHub actions
 @app.route('/webhook', methods=['POST'])
